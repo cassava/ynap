@@ -1,0 +1,21 @@
+---
+name: Deutsche Kreditbank / Girokonto
+file_pattern: null
+ignore_header_rows: 7
+ignore_patterns:
+  - '^"\d{2}\.\d{2}\.\d{4}";"";"";"";"Tagessaldo";"";"";".*";$'
+delimiter: ';'
+columns:
+  - { type: date, args: "%d.%m.%Y" }      # "Buchungstag" -> booking date
+  - { type: ignore }                      # "Wertstellung" -> value date
+  - { type: extra, args: "posting_text" } # "Buchungstext" -> posting text
+  - { type: payee }                       # "Auftraggeber / Begünstigter" -> applicant / beneficiary
+  - { type: memo }                        # "Verwendungszweck" -> memo
+  - { type: ignore }                      # "Kontonummer" -> account number
+  - { type: ignore }                      # "BLZ" -> bank code
+  - { type: inflow, args: "comma" }        # "Betrag (EUR)" -> amount
+  - { type: ignore }                      # "Gläubiger-ID" -> creditor
+  - { type: ignore }                      # "Mandatsreferenz" -> mandate reference
+  - { type: ignore }                      # "Kundenreferenz" -> customer reference
+rule_files:
+  - ./rules.yaml
