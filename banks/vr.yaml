@@ -1,0 +1,25 @@
+---
+name: Volksbanken / Girokonto
+file_pattern: 'Umsaetze_[A-Z]{2}\d{20}_\d{4}.\d{2}.\d{2}.csv'
+ignore_header_rows: 16
+ignore_patterns:
+  - '^;;;;;;;;;;;;;$'
+  - '^\d{2}\.\d{2}\.\d{4};;;;;;;;;;.*$'
+delimiter: ';'
+columns:
+  - { type: date, args: "%d.%m.%Y" }  # Buchungstag
+  - { type: ignore }  # Valuta
+  - { type: extra, args: "transaction_type" }  # Textschlüssel
+  - { type: ignore }  # Primanota
+  - { type: payee }  # Zahlungsempfänger
+  - { type: ignore }  # ZahlungsempfängerKto
+  - { type: ignore }  # ZahlungsempfängerIBAN
+  - { type: ignore }  # ZahlungsempfängerBLZ
+  - { type: ignore }  # ZahlungsempfängerBIC
+  - { type: memo }  # Vorgang/Verwendungszweck
+  - { type: ignore }  # Kundenreferenz
+  - { type: ignore }  # Währung
+  - { type: inflow, args: "comma" }  # Umsatz
+  - { type: cdflag, args: "S" }  # Soll/Haben
+rule_files:
+  - ./rules.yaml
