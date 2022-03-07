@@ -35,6 +35,7 @@ pub enum Field {
     Memo,
     Inflow(DecimalSeparator),
     Outflow(DecimalSeparator),
+    CDFlag(String),
     Extra(String),
 }
 
@@ -86,8 +87,19 @@ impl Record {
                 Field::Payee => r.payee = v,
                 Field::Category => r.category = v,
                 Field::Memo => r.memo = v,
-                Field::Inflow(sep) => r.amount = sep.simplify(&v),
+                Field::Inflow(sep) => {
+                    r.amount = if r.amount == "-" {
+                        format!("-{}", sep.simplify(&v))
+                    } else {
+                        sep.simplify(&v)
+                    }
+                }
                 Field::Outflow(sep) => r.amount = format!("-{}", sep.simplify(&v)),
+                Field::CDFlag(neg) => {
+                    if &v == neg {
+                        r.amount = format!("-{}", r.amount)
+                    }
+                }
                 Field::Extra(key) => {
                     r.extra.insert(key.to_owned(), v);
                 }
