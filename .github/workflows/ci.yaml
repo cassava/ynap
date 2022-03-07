@@ -12,6 +12,9 @@ jobs:
         toolchain: stable
         components: rustfmt, clippy
 
+    - name: Checkout code
+      uses: actions/checkout@v2
+
     - name: Run cargo check
       uses: actions-rs/cargo@v1
       with:
